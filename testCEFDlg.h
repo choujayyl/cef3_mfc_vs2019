@@ -4,7 +4,8 @@
 
 #pragma once
 #include "simple_handler.h"
-
+#include "httplib.h"
+using namespace httplib;
 // CtestCEFDlg 对话框
 class CtestCEFDlg : public CDialogEx
 {
@@ -20,6 +21,8 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
+private:
+	Server httplibSever;
 
 // 实现
 protected:

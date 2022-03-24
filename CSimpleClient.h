@@ -3,7 +3,7 @@
 //#include "include/cef_app.h"
 #include "include/cef_client.h"
 
-class CSimpleClient : public CefClient, public CefLifeSpanHandler
+class CSimpleClient : public CefClient, public CefLifeSpanHandler,public CefKeyboardHandler
 {
 public:
     CSimpleClient() {};
@@ -26,6 +26,14 @@ public:
     //    command_line->AppendSwitch("--disable-web-security");
     //    command_line->AppendSwitch("--disable-site-isolation-trials");
     //}
+    virtual CefRefPtr<CefKeyboardHandler> GetKeyboardHandler() override
+    {
+        return this;
+    }
+    virtual bool OnPreKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event, bool* is_keyboard_shortcut) ;
+    virtual  bool OnKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event) ;
+
+    void ShowDevTools(CefRefPtr<CefBrowser> browser, const CefPoint& inspect_element_at);
 
 private:
     CefRefPtr<CefBrowser> m_cefBrowser;

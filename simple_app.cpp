@@ -78,6 +78,69 @@
 //}  // namespace
 
 SimpleApp::SimpleApp() {}
+
+void SimpleApp::OnContextCreated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+	CefRefPtr<CefV8Context> context)
+{
+    // The var type can accept all object or variable
+    CefRefPtr<CefV8Value> window = context->GetGlobal();
+
+    // bind value into window[or you can bind value into window sub node]
+    CefRefPtr<CefV8Value> strValue = CefV8Value::CreateString("say yes");
+    window->SetValue("say_yes", strValue, V8_PROPERTY_ATTRIBUTE_NONE);
+
+    CefRefPtr<CefV8Handler> handler = new SimpleApp();
+    window->SetValue("register",
+        CefV8Value::CreateFunction("register", handler),
+        V8_PROPERTY_ATTRIBUTE_NONE);
+}
+
+bool SimpleApp::Execute(const CefString& name, CefRefPtr<CefV8Value> object, const CefV8ValueList& arguments,
+	CefRefPtr<CefV8Value>& retval, CefString& exception)
+{
+    if (name == "register")
+    {
+        if (arguments.size() == 1 && arguments[0]->IsFunction())
+        {
+            CefRefPtr<CefV8Value> callbackFunc = arguments[0];
+            CefRefPtr<CefV8Context> callbackContext = CefV8Context::GetCurrentContext();
+
+            CefV8ValueList args;
+            args.push_back(CefV8Value::CreateInt(3));
+            args.push_back(CefV8Value::CreateInt(4));
+
+            CefRefPtr<CefV8Value> ret = callbackFunc->ExecuteFunctionWithContext(callbackContext, object, args);
+
+            if (ret == nullptr)
+            {
+                MessageBox(NULL, L"Hello, Windows!", L"hello", MB_OK);
+            }
+            else
+            {
+                //QMessageBox::information(nullptr, "title", QString("%1").arg(ret->GetIntValue()));
+                std::string tmp = std::to_string(ret->GetIntValue());
+                std::wstring stemp = std::wstring(tmp.begin(), tmp.end());
+                LPCWSTR sw = stemp.c_str();
+                MessageBox(NULL, sw,L"title", MB_OK);
+            }
+            return true;
+        }
+    }
+
+    return false;
+
+}
+
+CefRefPtr<CefBrowserProcessHandler> SimpleApp::GetBrowserProcessHandler()
+{
+    return this;
+}
+
+CefRefPtr<CefRenderProcessHandler> SimpleApp::GetRenderProcessHandler()
+{
+    return this;
+}
+
 //
 //void SimpleApp::OnContextInitialized() {
 //  CEF_REQUIRE_UI_THREAD();

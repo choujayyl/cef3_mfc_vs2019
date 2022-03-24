@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "include/cef_app.h"
 #include "CSimpleClient.h"
+#include "simple_app.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -18,10 +19,27 @@
 
 
 
+
 CtestCEFDlg::CtestCEFDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_TESTCEF_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+	std::thread([&]
+	{
+			auto ret = httplibSever.set_mount_point("/", "./sample");
+			if (!ret) {
+				// The specified base directory doesn't exist...
+			}
+			httplibSever.listen("localhost", 1234);
+			// Mount / to ./www directory
+
+		}).detach();
+
+		httplibSever.Post("/CPPFunction", [&](const auto& req, auto& res) {
+			res.set_content("{\"data\":\"I am from C++\"}","application/json");
+			});
+
 }
 
 void CtestCEFDlg::DoDataExchange(CDataExchange* pDX)
@@ -47,6 +65,23 @@ BOOL CtestCEFDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	CefMainArgs main_args(AfxGetApp()->m_hInstance);
+
+	CefRefPtr<SimpleApp> app(new SimpleApp);
+	int exit_code = CefExecuteProcess(main_args, app.get(), NULL);
+	if (exit_code >= 0)
+	{
+		exit(exit_code);
+	}
+
+	//CefRefPtr<CefApp> m_app;
+
+	CefSettings settings;
+	CefSettingsTraits::init(&settings);
+	settings.no_sandbox = true;
+	settings.multi_threaded_message_loop = true;
+
+	CefInitialize(main_args, settings, app.get(), NULL);
 
 	CefRefPtr<CSimpleClient> client(new CSimpleClient());
 
@@ -65,7 +100,9 @@ BOOL CtestCEFDlg::OnInitDialog()
 	
 	
 	info.SetAsChild(GetSafeHwnd(), CefRect(0, 0, rect.Width(), rect.Height()));
-	CefBrowserHost::CreateBrowser(info, client, CefString("file:///./sample/index.html"), b_settings, nullptr, nullptr);
+	//file:///./sample/index.html
+	//file:///G:/tmp/web3d/dist/web3d_ui/index.html
+	CefBrowserHost::CreateBrowser(info, client, CefString("http://localhost:1234"), b_settings, nullptr, nullptr);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

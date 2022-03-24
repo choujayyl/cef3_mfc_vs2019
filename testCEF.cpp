@@ -48,23 +48,23 @@ BOOL CtestCEFApp::InitInstance()
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
-	CefMainArgs main_args(m_hInstance);
+	//CefMainArgs main_args(m_hInstance);
 
-	CefRefPtr<SimpleApp> app(new SimpleApp);
-	int exit_code = CefExecuteProcess(main_args, app.get(), NULL);
-	if (exit_code >= 0)
-	{
-		exit(exit_code);
-	}
+	//CefRefPtr<SimpleApp> app(new SimpleApp);
+	//int exit_code = CefExecuteProcess(main_args, app.get(), NULL);
+	//if (exit_code >= 0)
+	//{
+	//	exit(exit_code);
+	//}
 
-	//CefRefPtr<CefApp> m_app;
+	////CefRefPtr<CefApp> m_app;
 
-	CefSettings settings;
-	CefSettingsTraits::init(&settings);
-	settings.no_sandbox = true;
-	settings.multi_threaded_message_loop = true;
+	//CefSettings settings;
+	//CefSettingsTraits::init(&settings);
+	//settings.no_sandbox = true;
+	//settings.multi_threaded_message_loop = true;
 
-	CefInitialize(main_args, settings, app.get(), NULL);
+	//CefInitialize(main_args, settings, app.get(), NULL);
 
 
 	CWinApp::InitInstance();

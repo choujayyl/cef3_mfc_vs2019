@@ -39,7 +39,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -76,8 +76,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\choujayyl\Desktop\工作\dev\2021\01-CPP_WEB_BROWER\cef_binary_96.0.18+gfe551e4+chromium-96.0.4664.110_windows32;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\choujayyl\Desktop\工作\dev\2021\01-CPP_WEB_BROWER\cef_binary_96.0.18+gfe551e4+chromium-96.0.4664.110_windows32\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\choujayyl\Desktop\cef_binary_99.2.13+gd9af866+chromium-99.0.4844.83_windows32;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\choujayyl\Desktop\cef_binary_99.2.13+gd9af866+chromium-99.0.4844.83_windows32\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -98,10 +98,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcef.lib;libcef_dll_wrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <Midl>
@@ -195,6 +196,7 @@
   <ItemGroup>
     <ClInclude Include="CSimpleClient.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="httplib.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="simple_app.h" />
